@@ -68,9 +68,14 @@
   <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
   <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
 
-  <!-- Engine + data (plain JS) -->
-  <script src="js/solver.js"></script>
-  <script src="js/data.js"></script>
+  <!-- Engine + data: Choose ONE option below -->
+
+  <!-- OPTION 1: Local JavaScript (no backend required) -->
+  <!-- <script src="js/solver.js"></script> -->
+  <!-- <script src="js/data.js"></script> -->
+
+  <!-- OPTION 2: Python Backend API (requires backend running on localhost:8000) -->
+  <script src="js/api-adapter.js"></script>
 
   <!-- UI (JSX, transpiled by Babel) -->
   <script type="text/babel" src="js/components.jsx"></script>

@@ -226,13 +226,16 @@ function SubmitPage({ addRecord }) {
 
   const onGridChange = (next) => { setBoard(next); setResult(null); setSaved(false); };
 
-  const analyze = () => {
+  const analyze = async () => {
     setBusy(true); setResult(null); setSaved(false);
-    setTimeout(() => {
-      const r = E.analyze(board);
+    try {
+      const r = await E.analyze(board);
       setResult(r);
+    } catch (err) {
+      setResult({ ok: false, reason: "error", message: err.message || "Failed to analyze puzzle" });
+    } finally {
       setBusy(false);
-    }, 560);
+    }
   };
 
   // Persist a full Technique-Tier record. The repository table, analytics
