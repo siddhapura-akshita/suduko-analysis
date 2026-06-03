@@ -1,5 +1,48 @@
 /* Hand-built SVG charts — academic, minimal. Exports to window.
-   Each chart uses a fixed viewBox and scales to its container width. */
+   Each chart uses a fixed viewBox and scales to its container width.
+
+   Color Palette (Research Theme):
+   - Frozen Water: #CFFCFF (cool/light - overrated)
+   - Pearl Aqua: #AAEFDF (cool mid)
+   - Light Green: #9EE37D (accurate/neutral)
+   - Bright Fern: #63C132 (warm mid - underrated)
+   - India Green: #358600 (warm/strong - very underrated)
+*/
+
+// ---- Color Palette ----
+const PALETTE = {
+  frozenWater: "#CFFCFF",
+  pearlAqua: "#AAEFDF",
+  lightGreen: "#9EE37D",
+  brightFern: "#63C132",
+  indiaGreen: "#358600",
+};
+
+// ---- Publisher Colors (consistent across all charts) ----
+const PUBLISHER_COLORS = {
+  "NYT": PALETTE.indiaGreen,
+  "Sudoku.com": PALETTE.brightFern,
+  "The Guardian": PALETTE.pearlAqua,
+  "Times Sudoku": PALETTE.lightGreen,
+};
+
+// ---- Primary Publishers (excludes "Others" for analytics) ----
+const PRIMARY_PUBLISHERS = ["NYT", "Sudoku.com", "The Guardian", "Times Sudoku"];
+
+// ---- Unified Difficulty Ordering (easiest to hardest) ----
+const UNIFIED_DIFFICULTY_ORDER = [
+  "Easy",
+  "Mild",
+  "Medium",
+  "Moderate",
+  "Hard",
+  "Difficult",
+  "Expert",
+  "Master",
+  "Fiendish",
+  "Extreme",
+  "Super Fiendish"
+];
 
 // shared axis/grid colors via Tailwind text-* + currentColor
 const axisStroke = "text-slate-300 dark:text-slate-700";
@@ -22,15 +65,14 @@ function arcPath(cx, cy, r, startDeg, endDeg) {
 function DifficultyGauge({ value, max = 1000, difficulty }) {
   const W = 320, H = 188, cx = W / 2, cy = 162, r = 128, sw = 16;
   const frac = Math.max(0, Math.min(1, value / max));
-  // 180deg (left) -> 360/0deg (right). map frac to 180..360
   const ang = 180 + frac * 180;
   const bands = [
-    { from: 0, to: 0.255, color: "#059669" },
-    { from: 0.255, to: 0.515, color: "#d97706" },
-    { from: 0.515, to: 1, color: "#e11d48" },
+    { from: 0, to: 0.255, color: PALETTE.lightGreen },
+    { from: 0.255, to: 0.515, color: PALETTE.brightFern },
+    { from: 0.515, to: 1, color: PALETTE.indiaGreen },
   ];
   const [nx, ny] = polar(cx, cy, r - 26, ang);
-  const dColor = { Easy: "#059669", Medium: "#d97706", Hard: "#e11d48" }[difficulty] || "#0d9488";
+  const dColor = { Easy: PALETTE.lightGreen, Medium: PALETTE.brightFern, Hard: PALETTE.indiaGreen }[difficulty] || PALETTE.pearlAqua;
 
   return (
     <svg viewBox={`0 0 ${W} ${H}`} width="100%" style={{ maxWidth: W }} className="mx-auto block">
@@ -76,7 +118,7 @@ function Histogram({ rows }) {
   });
   const maxN = Math.max(1, ...bins.map((b) => b.n));
   const yticks = niceTicks(maxN, 4);
-  const bandColor = (lo) => (lo < 255 ? "#059669" : lo < 515 ? "#d97706" : "#e11d48");
+  const bandColor = (lo) => (lo < 255 ? PALETTE.lightGreen : lo < 515 ? PALETTE.brightFern : PALETTE.indiaGreen);
   const bw = iw / bins.length;
 
   return (
@@ -124,10 +166,15 @@ function BoxPlot({ rows, publishers }) {
   const W = 520, H = 260, m = { t: 16, r: 16, b: 52, l: 40 };
   const iw = W - m.l - m.r, ih = H - m.t - m.b;
   const maxScore = 10;
-  const groups = publishers.map((p) => {
+
+  // Filter to primary publishers only
+  const filteredPubs = publishers.filter(p => PRIMARY_PUBLISHERS.includes(p));
+
+  const groups = filteredPubs.map((p) => {
     const scores = rows.filter((r) => r.publisher === p).map((r) => r.measuredScore);
-    return { p, short: window.SudokuData.SUBMIT_PUBLISHER_SHORT[p] || p, scores };
+    return { p, short: window.SudokuData.SUBMIT_PUBLISHER_SHORT[p] || p, scores, color: PUBLISHER_COLORS[p] || PALETTE.pearlAqua };
   }).filter((g) => g.scores.length);
+
   const y = (v) => m.t + ih - (v / maxScore) * ih;
   const slot = iw / Math.max(1, groups.length);
   const boxW = Math.min(54, slot * 0.5);
@@ -144,15 +191,15 @@ function BoxPlot({ rows, publishers }) {
       {groups.map((g, k) => {
         const cx = m.l + slot * (k + 0.5);
         const Q = quantiles(g.scores);
-        const col = "#0d9488";
+        const col = g.color;
         return (
           <g key={g.p}>
             {/* whiskers */}
-            <line x1={cx} y1={y(Q.min)} x2={cx} y2={y(Q.max)} className="stroke-slate-400 dark:stroke-slate-500" strokeWidth="1" />
-            <line x1={cx - 8} y1={y(Q.min)} x2={cx + 8} y2={y(Q.min)} className="stroke-slate-400 dark:stroke-slate-500" strokeWidth="1" />
-            <line x1={cx - 8} y1={y(Q.max)} x2={cx + 8} y2={y(Q.max)} className="stroke-slate-400 dark:stroke-slate-500" strokeWidth="1" />
+            <line x1={cx} y1={y(Q.min)} x2={cx} y2={y(Q.max)} stroke={col} strokeWidth="1.5" opacity="0.6" />
+            <line x1={cx - 8} y1={y(Q.min)} x2={cx + 8} y2={y(Q.min)} stroke={col} strokeWidth="1.5" opacity="0.6" />
+            <line x1={cx - 8} y1={y(Q.max)} x2={cx + 8} y2={y(Q.max)} stroke={col} strokeWidth="1.5" opacity="0.6" />
             {/* box */}
-            <rect x={cx - boxW / 2} y={y(Q.q3)} width={boxW} height={Math.max(1, y(Q.q1) - y(Q.q3))} rx="2" fill={col} fillOpacity="0.14" stroke={col} strokeWidth="1.4" />
+            <rect x={cx - boxW / 2} y={y(Q.q3)} width={boxW} height={Math.max(1, y(Q.q1) - y(Q.q3))} rx="2" fill={col} fillOpacity="0.2" stroke={col} strokeWidth="1.4" />
             {/* median */}
             <line x1={cx - boxW / 2} y1={y(Q.med)} x2={cx + boxW / 2} y2={y(Q.med)} stroke={col} strokeWidth="2.2" />
             {/* points (jittered) */}
@@ -176,19 +223,29 @@ function ScatterPlot({ rows }) {
   const iw = W - m.l - m.r, ih = H - m.t - m.b;
   const maxScore = 10;
 
+  // Filter to primary publishers only
+  const filteredRows = rows.filter(r => PRIMARY_PUBLISHERS.includes(r.publisher));
+
   // Map score to coordinate
   const x = (v) => m.l + ((v - 1) / (maxScore - 1)) * iw;
   const y = (v) => m.t + ih - ((v - 1) / (maxScore - 1)) * ih;
 
   // Aggregate counts per (claimedScore, measuredScore) cell
   const cells = {};
-  rows.forEach((r) => {
+  filteredRows.forEach((r) => {
     const key = `${r.claimedScore}|${r.measuredScore}`;
     cells[key] = (cells[key] || 0) + 1;
   });
   const maxC = Math.max(1, ...Object.values(cells));
 
   const ticks = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
+  // Mismatch colors using palette
+  const getMismatchColor = (mismatch) => {
+    if (mismatch === 0) return PALETTE.lightGreen;      // Accurate
+    if (mismatch > 0) return PALETTE.indiaGreen;         // Underrated (harder than claimed)
+    return PALETTE.frozenWater;                          // Overrated (easier than claimed)
+  };
 
   return (
     <svg viewBox={`0 0 ${W} ${H}`} width="100%" className="block">
@@ -200,17 +257,17 @@ function ScatterPlot({ rows }) {
         </g>
       ))}
       {/* Diagonal agreement line */}
-      <line x1={x(1)} y1={y(1)} x2={x(10)} y2={y(10)} className="stroke-emerald-500 dark:stroke-emerald-400" strokeWidth="2" strokeDasharray="6 4" opacity="0.6" />
-      <text x={x(8) + 12} y={y(8) - 8} className="fill-emerald-600 dark:fill-emerald-400 font-mono" fontSize="8">perfect agreement</text>
+      <line x1={x(1)} y1={y(1)} x2={x(10)} y2={y(10)} stroke={PALETTE.pearlAqua} strokeWidth="2" strokeDasharray="6 4" opacity="0.7" />
+      <text x={x(8) + 12} y={y(8) - 8} fill={PALETTE.brightFern} className="font-mono" fontSize="8">perfect agreement</text>
       {/* Points */}
       {Object.entries(cells).map(([key, n]) => {
         const [cl, me] = key.split("|").map(Number);
         const mismatch = me - cl;
-        const color = mismatch === 0 ? "#059669" : mismatch > 0 ? "#d97706" : "#0284c7";
+        const color = getMismatchColor(mismatch);
         const rad = 6 + (n / maxC) * 14;
         return (
           <g key={key}>
-            <circle cx={x(cl)} cy={y(me)} r={rad} fill={color} fillOpacity="0.2" stroke={color} strokeWidth="1.5" />
+            <circle cx={x(cl)} cy={y(me)} r={rad} fill={color} fillOpacity="0.3" stroke={color} strokeWidth="1.5" />
             <text x={x(cl)} y={y(me) + 3.5} textAnchor="middle" className="fill-slate-700 dark:fill-slate-200 font-mono" fontSize="10" fontWeight="600">{n}</text>
           </g>
         );
@@ -227,36 +284,40 @@ function ScatterPlot({ rows }) {
       {/* Legend */}
       <g transform={`translate(${W - m.r - 90}, ${m.t})`}>
         <rect x="-4" y="-4" width="86" height="58" rx="4" className="fill-white/80 dark:fill-slate-900/80" />
-        <circle cx="6" cy="8" r="5" fill="#059669" fillOpacity="0.3" stroke="#059669" strokeWidth="1" />
+        <circle cx="6" cy="8" r="5" fill={PALETTE.lightGreen} fillOpacity="0.4" stroke={PALETTE.lightGreen} strokeWidth="1" />
         <text x="18" y="11" className={`${tickText} font-mono`} fontSize="8">Accurate</text>
-        <circle cx="6" cy="24" r="5" fill="#d97706" fillOpacity="0.3" stroke="#d97706" strokeWidth="1" />
+        <circle cx="6" cy="24" r="5" fill={PALETTE.indiaGreen} fillOpacity="0.4" stroke={PALETTE.indiaGreen} strokeWidth="1" />
         <text x="18" y="27" className={`${tickText} font-mono`} fontSize="8">Underrated</text>
-        <circle cx="6" cy="40" r="5" fill="#0284c7" fillOpacity="0.3" stroke="#0284c7" strokeWidth="1" />
+        <circle cx="6" cy="40" r="5" fill={PALETTE.frozenWater} fillOpacity="0.4" stroke={PALETTE.pearlAqua} strokeWidth="1" />
         <text x="18" y="43" className={`${tickText} font-mono`} fontSize="8">Overrated</text>
       </g>
     </svg>
   );
 }
 
-// ====== Heatmap: Publisher × Difficulty ====================================
+// ====== Heatmap: Publisher × Difficulty (Unified Ordering) ==================
 function Heatmap({ rows, publishers }) {
   const D = window.SudokuData;
-  const W = 520, H = 280, m = { t: 16, r: 16, b: 60, l: 90 };
+  const W = 580, H = 260, m = { t: 16, r: 16, b: 70, l: 80 };
   const iw = W - m.l - m.r, ih = H - m.t - m.b;
 
-  // Get all unique difficulty labels across publishers
-  const allDiffs = [];
-  publishers.forEach((p) => {
-    (D.diffsFor(p) || []).forEach((d) => {
-      if (!allDiffs.includes(d)) allDiffs.push(d);
-    });
+  // Filter to primary publishers only
+  const filteredPubs = publishers.filter(p => PRIMARY_PUBLISHERS.includes(p));
+
+  // Use unified difficulty ordering - only include difficulties that exist in data
+  const allDiffsInData = new Set();
+  filteredPubs.forEach((p) => {
+    (D.diffsFor(p) || []).forEach((d) => allDiffsInData.add(d));
   });
+
+  // Filter unified order to only include difficulties that appear in data
+  const orderedDiffs = UNIFIED_DIFFICULTY_ORDER.filter(d => allDiffsInData.has(d));
 
   // Build data matrix: publisher -> difficulty -> { count, avgMismatch, accuracy }
   const matrix = {};
-  publishers.forEach((p) => {
+  filteredPubs.forEach((p) => {
     matrix[p] = {};
-    allDiffs.forEach((d) => {
+    orderedDiffs.forEach((d) => {
       const matches = rows.filter((r) => r.publisher === p && r.claimed === d);
       if (matches.length > 0) {
         const accurate = matches.filter((r) => r.mismatch === 0).length;
@@ -269,37 +330,53 @@ function Heatmap({ rows, publishers }) {
     });
   });
 
-  const activePubs = publishers.filter((p) => Object.keys(matrix[p]).length > 0);
-  const activeDiffs = allDiffs.filter((d) => activePubs.some((p) => matrix[p][d]));
+  const activePubs = filteredPubs.filter((p) => Object.keys(matrix[p]).length > 0);
 
-  const cellW = iw / Math.max(1, activeDiffs.length);
+  const cellW = iw / Math.max(1, orderedDiffs.length);
   const cellH = ih / Math.max(1, activePubs.length);
 
-  // Color scale: red (underrated) -> white (accurate) -> blue (overrated)
+  // Color scale using new palette:
+  // Negative mismatch (overrated/easier): cool tones (Frozen Water, Pearl Aqua)
+  // Zero mismatch (accurate): neutral (Light Green)
+  // Positive mismatch (underrated/harder): warm greens (Bright Fern, India Green)
   const mismatchColor = (avg) => {
-    if (avg > 1.5) return "#f97316"; // orange for very underrated
-    if (avg > 0.5) return "#fbbf24"; // yellow-orange for underrated
-    if (avg > -0.5) return "#10b981"; // green for accurate
-    if (avg > -1.5) return "#38bdf8"; // light blue for overrated
-    return "#3b82f6"; // blue for very overrated
+    if (avg > 2) return PALETTE.indiaGreen;      // Very underrated
+    if (avg > 1) return PALETTE.brightFern;      // Underrated
+    if (avg > 0.3) return PALETTE.lightGreen;    // Slightly underrated
+    if (avg > -0.3) return PALETTE.pearlAqua;    // Accurate (neutral)
+    if (avg > -1) return PALETTE.pearlAqua;      // Slightly overrated
+    if (avg > -2) return PALETTE.frozenWater;    // Overrated
+    return PALETTE.frozenWater;                   // Very overrated
   };
 
   return (
     <svg viewBox={`0 0 ${W} ${H}`} width="100%" className="block">
-      {/* Cells */}
+      {/* Empty cells background (for publishers without certain difficulties) */}
       {activePubs.map((p, pi) => (
-        activeDiffs.map((d, di) => {
+        orderedDiffs.map((d, di) => {
+          const cx = m.l + di * cellW;
+          const cy = m.t + pi * cellH;
+          // Always draw a light background
+          return (
+            <rect key={`bg-${p}-${d}`} x={cx + 1} y={cy + 1} width={cellW - 2} height={cellH - 2} rx="3"
+                  className="fill-slate-50 dark:fill-slate-800/30" />
+          );
+        })
+      ))}
+      {/* Data cells */}
+      {activePubs.map((p, pi) => (
+        orderedDiffs.map((d, di) => {
           const cell = matrix[p][d];
           if (!cell) return null;
           const cx = m.l + di * cellW;
           const cy = m.t + pi * cellH;
           return (
             <g key={`${p}-${d}`}>
-              <rect x={cx + 2} y={cy + 2} width={cellW - 4} height={cellH - 4} rx="4" fill={mismatchColor(cell.avgMismatch)} fillOpacity="0.7" />
-              <text x={cx + cellW / 2} y={cy + cellH / 2 - 4} textAnchor="middle" className="fill-slate-800 dark:fill-white font-mono" fontSize="11" fontWeight="600">
+              <rect x={cx + 2} y={cy + 2} width={cellW - 4} height={cellH - 4} rx="4" fill={mismatchColor(cell.avgMismatch)} fillOpacity="0.75" />
+              <text x={cx + cellW / 2} y={cy + cellH / 2 - 2} textAnchor="middle" className="fill-slate-800 dark:fill-white font-mono" fontSize="10" fontWeight="600">
                 {cell.avgMismatch >= 0 ? "+" : ""}{cell.avgMismatch.toFixed(1)}
               </text>
-              <text x={cx + cellW / 2} y={cy + cellH / 2 + 10} textAnchor="middle" className="fill-slate-600 dark:fill-slate-300 font-mono" fontSize="8">
+              <text x={cx + cellW / 2} y={cy + cellH / 2 + 10} textAnchor="middle" className="fill-slate-600 dark:fill-slate-300 font-mono" fontSize="7">
                 n={cell.n}
               </text>
             </g>
@@ -312,21 +389,22 @@ function Heatmap({ rows, publishers }) {
           {D.SUBMIT_PUBLISHER_SHORT[p] || p}
         </text>
       ))}
-      {/* Column labels (difficulties) */}
-      {activeDiffs.map((d, i) => (
-        <text key={d} x={m.l + i * cellW + cellW / 2} y={H - m.b + 16} textAnchor="middle" className={`${labelText} font-mono`} fontSize="8" transform={`rotate(-25 ${m.l + i * cellW + cellW / 2} ${H - m.b + 16})`}>
+      {/* Column labels (difficulties) - rotated for readability */}
+      {orderedDiffs.map((d, i) => (
+        <text key={d} x={m.l + i * cellW + cellW / 2} y={H - m.b + 14} textAnchor="start" className={`${labelText} font-mono`} fontSize="8"
+              transform={`rotate(-35 ${m.l + i * cellW + cellW / 2} ${H - m.b + 14})`}>
           {d}
         </text>
       ))}
       {/* Legend */}
-      <g transform={`translate(${W - m.r - 120}, ${H - 24})`}>
-        <text x="0" y="0" className={`${tickText} font-mono`} fontSize="8">Avg mismatch:</text>
-        <rect x="60" y="-8" width="12" height="12" rx="2" fill="#f97316" fillOpacity="0.7" />
-        <text x="76" y="0" className={`${tickText} font-mono`} fontSize="7">under</text>
-        <rect x="95" y="-8" width="12" height="12" rx="2" fill="#10b981" fillOpacity="0.7" />
-        <text x="111" y="0" className={`${tickText} font-mono`} fontSize="7">≈0</text>
-        <rect x="123" y="-8" width="12" height="12" rx="2" fill="#3b82f6" fillOpacity="0.7" />
-        <text x="139" y="0" className={`${tickText} font-mono`} fontSize="7">over</text>
+      <g transform={`translate(${W - m.r - 150}, ${H - 20})`}>
+        <text x="0" y="0" className={`${tickText} font-mono`} fontSize="8">Mismatch:</text>
+        <rect x="52" y="-8" width="14" height="10" rx="2" fill={PALETTE.indiaGreen} fillOpacity="0.75" />
+        <text x="70" y="0" className={`${tickText} font-mono`} fontSize="7">+under</text>
+        <rect x="95" y="-8" width="14" height="10" rx="2" fill={PALETTE.pearlAqua} fillOpacity="0.75" />
+        <text x="113" y="0" className={`${tickText} font-mono`} fontSize="7">≈0</text>
+        <rect x="130" y="-8" width="14" height="10" rx="2" fill={PALETTE.frozenWater} fillOpacity="0.75" />
+        <text x="148" y="0" className={`${tickText} font-mono`} fontSize="7">-over</text>
       </g>
     </svg>
   );
@@ -335,11 +413,14 @@ function Heatmap({ rows, publishers }) {
 // ====== Publisher Accuracy Bar Chart =======================================
 function AccuracyBar({ rows, publishers }) {
   const D = window.SudokuData;
-  const W = 520, H = 220, m = { t: 16, r: 16, b: 40, l: 80 };
+  const W = 520, H = 200, m = { t: 16, r: 16, b: 40, l: 80 };
   const iw = W - m.l - m.r, ih = H - m.t - m.b;
 
+  // Filter to primary publishers only
+  const filteredPubs = publishers.filter(p => PRIMARY_PUBLISHERS.includes(p));
+
   // Calculate accuracy per publisher
-  const pubStats = publishers.map((p) => {
+  const pubStats = filteredPubs.map((p) => {
     const matches = rows.filter((r) => r.publisher === p);
     if (matches.length === 0) return null;
     const accurate = matches.filter((r) => r.mismatch === 0).length;
@@ -349,10 +430,11 @@ function AccuracyBar({ rows, publishers }) {
       n: matches.length,
       accuracy: accurate / matches.length,
       accurate,
+      color: PUBLISHER_COLORS[p] || PALETTE.pearlAqua,
     };
   }).filter(Boolean).sort((a, b) => b.accuracy - a.accuracy);
 
-  const barH = Math.min(32, ih / Math.max(1, pubStats.length) - 4);
+  const barH = Math.min(36, ih / Math.max(1, pubStats.length) - 6);
 
   return (
     <svg viewBox={`0 0 ${W} ${H}`} width="100%" className="block">
@@ -370,13 +452,12 @@ function AccuracyBar({ rows, publishers }) {
       {pubStats.map((s, i) => {
         const cy = m.t + (i + 0.5) * (ih / pubStats.length);
         const barWidth = s.accuracy * iw;
-        const color = s.accuracy >= 0.6 ? "#059669" : s.accuracy >= 0.4 ? "#d97706" : "#dc2626";
         return (
           <g key={s.publisher}>
             {/* Background bar */}
             <rect x={m.l} y={cy - barH / 2} width={iw} height={barH} rx="4" className="fill-slate-100 dark:fill-slate-800" />
-            {/* Accuracy bar */}
-            <rect x={m.l} y={cy - barH / 2} width={barWidth} height={barH} rx="4" fill={color} fillOpacity="0.8" />
+            {/* Accuracy bar - use publisher color */}
+            <rect x={m.l} y={cy - barH / 2} width={barWidth} height={barH} rx="4" fill={s.color} fillOpacity="0.75" />
             {/* Label */}
             <text x={m.l - 6} y={cy + 3} textAnchor="end" className={`${labelText} font-mono`} fontSize="10">{s.short}</text>
             {/* Value */}
@@ -411,7 +492,7 @@ function Scatter({ rows }) {
   return (
     <svg viewBox={`0 0 ${W} ${H}`} width="100%" className="block">
       {/* diagonal agreement reference */}
-      <line x1={xi(0)} y1={yi(0)} x2={xi(2)} y2={yi(2)} className="stroke-slate-300 dark:stroke-slate-600" strokeWidth="1" strokeDasharray="4 4" />
+      <line x1={xi(0)} y1={yi(0)} x2={xi(2)} y2={yi(2)} stroke={PALETTE.pearlAqua} strokeWidth="1" strokeDasharray="4 4" />
       <text x={xi(0) + 14} y={yi(0) - 10} className={`${tickText} font-mono`} fontSize="8">perfect agreement →</text>
       {/* grid cells */}
       {labels.map((_, gx) => labels.map((_, gy) => (
@@ -429,11 +510,11 @@ function Scatter({ rows }) {
         const x = xi(DIFF_IDX[cl]), y = yi(DIFF_IDX[me]);
         const match = cl === me;
         const over = DIFF_IDX[cl] > DIFF_IDX[me];
-        const color = match ? "#0d9488" : over ? "#e11d48" : "#d97706";
+        const color = match ? PALETTE.lightGreen : over ? PALETTE.frozenWater : PALETTE.indiaGreen;
         const rad = 5 + (n / maxC) * 13;
         return (
           <g key={key}>
-            <circle cx={x} cy={y} r={rad} fill={color} fillOpacity="0.16" stroke={color} strokeWidth="1.4" />
+            <circle cx={x} cy={y} r={rad} fill={color} fillOpacity="0.25" stroke={color} strokeWidth="1.4" />
             <text x={x} y={y + 3.5} textAnchor="middle" className="fill-slate-700 dark:fill-slate-200 font-mono" fontSize="10" fontWeight="600">{n}</text>
           </g>
         );
@@ -460,4 +541,17 @@ function niceTicks(max, count) {
   return ticks;
 }
 
-Object.assign(window, { DifficultyGauge, Histogram, BoxPlot, Scatter, ScatterPlot, Heatmap, AccuracyBar });
+Object.assign(window, {
+  DifficultyGauge,
+  Histogram,
+  BoxPlot,
+  Scatter,
+  ScatterPlot,
+  Heatmap,
+  AccuracyBar,
+  // Export constants for use elsewhere
+  PALETTE,
+  PUBLISHER_COLORS,
+  PRIMARY_PUBLISHERS,
+  UNIFIED_DIFFICULTY_ORDER
+});
