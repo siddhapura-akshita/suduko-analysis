@@ -111,6 +111,7 @@ const Icon = {
   check: (p) => <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" {...p}><path d="M5 12l4.5 4.5L19 7" strokeLinecap="round" strokeLinejoin="round"/></svg>,
   warn: (p) => <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.7" {...p}><path d="M12 3l9 16H3l9-16z" strokeLinejoin="round"/><path d="M12 10v4M12 17h.01" strokeLinecap="round"/></svg>,
   arrow: (p) => <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="1.8" {...p}><path d="M8 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round"/></svg>,
+  logout: (p) => <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.7" {...p}><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9" strokeLinecap="round" strokeLinejoin="round"/></svg>,
 };
 
 // ---- Logo ------------------------------------------------------------------
