@@ -3,9 +3,9 @@ const { useState, useEffect, useRef, useCallback, useMemo } = React;
 
 // ---- Difficulty meta -------------------------------------------------------
 const DIFF_META = {
-  Easy:   { text: "text-emerald-600 dark:text-emerald-400", dot: "#059669", bg: "bg-emerald-50 dark:bg-emerald-500/10", ring: "ring-emerald-600/20 dark:ring-emerald-400/20" },
-  Medium: { text: "text-amber-600 dark:text-amber-400",     dot: "#d97706", bg: "bg-amber-50 dark:bg-amber-500/10",     ring: "ring-amber-600/20 dark:ring-amber-400/20" },
-  Hard:   { text: "text-rose-600 dark:text-rose-400",       dot: "#e11d48", bg: "bg-rose-50 dark:bg-rose-500/10",       ring: "ring-rose-600/20 dark:ring-rose-400/20" },
+  Easy: { text: "text-emerald-600 dark:text-emerald-400", dot: "#059669", bg: "bg-emerald-50 dark:bg-emerald-500/10", ring: "ring-emerald-600/20 dark:ring-emerald-400/20" },
+  Medium: { text: "text-amber-600 dark:text-amber-400", dot: "#d97706", bg: "bg-amber-50 dark:bg-amber-500/10", ring: "ring-amber-600/20 dark:ring-amber-400/20" },
+  Hard: { text: "text-rose-600 dark:text-rose-400", dot: "#e11d48", bg: "bg-rose-50 dark:bg-rose-500/10", ring: "ring-rose-600/20 dark:ring-rose-400/20" },
 };
 
 function DiffBadge({ value, size = "sm" }) {
@@ -98,20 +98,20 @@ function Select({ value, onChange, options, placeholder, className = "" }) {
 
 // ---- Icons (minimal stroke) ------------------------------------------------
 const Icon = {
-  grid: (p) => <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.7" {...p}><rect x="3" y="3" width="18" height="18" rx="1.5"/><path d="M9 3v18M15 3v18M3 9h18M3 15h18"/></svg>,
-  chart: (p) => <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.7" {...p}><path d="M4 4v16h16"/><rect x="7" y="12" width="3" height="5"/><rect x="12" y="8" width="3" height="9"/><rect x="17" y="5" width="3" height="12"/></svg>,
-  sun: (p) => <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.7" {...p}><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" strokeLinecap="round"/></svg>,
-  moon: (p) => <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.7" {...p}><path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z"/></svg>,
-  search: (p) => <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.7" {...p}><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4" strokeLinecap="round"/></svg>,
-  download: (p) => <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.7" {...p}><path d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14" strokeLinecap="round" strokeLinejoin="round"/></svg>,
-  play: (p) => <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.7" {...p}><path d="M6 4l14 8-14 8V4z" strokeLinejoin="round"/></svg>,
-  spin: (p) => <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" {...p}><path d="M12 3a9 9 0 109 9" strokeLinecap="round"/></svg>,
-  flask: (p) => <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.7" {...p}><path d="M9 3h6M10 3v6L5 19a1.5 1.5 0 001.4 2h11.2A1.5 1.5 0 0019 19l-5-10V3" strokeLinejoin="round"/><path d="M7.5 14h9"/></svg>,
-  reset: (p) => <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.7" {...p}><path d="M4 4v5h5M4.6 13a8 8 0 102-7.7L4 9" strokeLinecap="round" strokeLinejoin="round"/></svg>,
-  check: (p) => <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" {...p}><path d="M5 12l4.5 4.5L19 7" strokeLinecap="round" strokeLinejoin="round"/></svg>,
-  warn: (p) => <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.7" {...p}><path d="M12 3l9 16H3l9-16z" strokeLinejoin="round"/><path d="M12 10v4M12 17h.01" strokeLinecap="round"/></svg>,
-  arrow: (p) => <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="1.8" {...p}><path d="M8 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round"/></svg>,
-  logout: (p) => <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.7" {...p}><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9" strokeLinecap="round" strokeLinejoin="round"/></svg>,
+  grid: (p) => <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.7" {...p}><rect x="3" y="3" width="18" height="18" rx="1.5" /><path d="M9 3v18M15 3v18M3 9h18M3 15h18" /></svg>,
+  chart: (p) => <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.7" {...p}><path d="M4 4v16h16" /><rect x="7" y="12" width="3" height="5" /><rect x="12" y="8" width="3" height="9" /><rect x="17" y="5" width="3" height="12" /></svg>,
+  sun: (p) => <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.7" {...p}><circle cx="12" cy="12" r="4" /><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" strokeLinecap="round" /></svg>,
+  moon: (p) => <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.7" {...p}><path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z" /></svg>,
+  search: (p) => <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.7" {...p}><circle cx="11" cy="11" r="7" /><path d="M21 21l-4-4" strokeLinecap="round" /></svg>,
+  download: (p) => <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.7" {...p}><path d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14" strokeLinecap="round" strokeLinejoin="round" /></svg>,
+  play: (p) => <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.7" {...p}><path d="M6 4l14 8-14 8V4z" strokeLinejoin="round" /></svg>,
+  spin: (p) => <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" {...p}><path d="M12 3a9 9 0 109 9" strokeLinecap="round" /></svg>,
+  flask: (p) => <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.7" {...p}><path d="M9 3h6M10 3v6L5 19a1.5 1.5 0 001.4 2h11.2A1.5 1.5 0 0019 19l-5-10V3" strokeLinejoin="round" /><path d="M7.5 14h9" /></svg>,
+  reset: (p) => <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.7" {...p}><path d="M4 4v5h5M4.6 13a8 8 0 102-7.7L4 9" strokeLinecap="round" strokeLinejoin="round" /></svg>,
+  check: (p) => <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" {...p}><path d="M5 12l4.5 4.5L19 7" strokeLinecap="round" strokeLinejoin="round" /></svg>,
+  warn: (p) => <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.7" {...p}><path d="M12 3l9 16H3l9-16z" strokeLinejoin="round" /><path d="M12 10v4M12 17h.01" strokeLinecap="round" /></svg>,
+  arrow: (p) => <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="1.8" {...p}><path d="M8 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round" /></svg>,
+  logout: (p) => <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.7" {...p}><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9" strokeLinecap="round" strokeLinejoin="round" /></svg>,
 };
 
 // ---- Logo ------------------------------------------------------------------
@@ -120,13 +120,13 @@ function Logo() {
     <div className="flex items-center gap-2.5">
       <div className="grid h-8 w-8 place-items-center rounded-lg bg-accent-600 shadow-sm">
         <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#fff" strokeWidth="1.6">
-          <rect x="4" y="4" width="16" height="16" rx="1.5"/>
-          <path d="M9.3 4v16M14.6 4v16M4 9.3h16M4 14.6h16"/>
+          <rect x="4" y="4" width="16" height="16" rx="1.5" />
+          <path d="M9.3 4v16M14.6 4v16M4 9.3h16M4 14.6h16" />
         </svg>
       </div>
       <div className="leading-tight">
         <div className="text-[13px] font-semibold tracking-tight text-slate-900 dark:text-white">Sudoku Difficulty Validator</div>
-        <div className="font-mono text-[10px] uppercase tracking-wider text-slate-400">Analytical engine · v1.0</div>
+        {/* <div className="font-mono text-[10px] uppercase tracking-wider text-slate-400">Analytical engine · v1.0</div>*/}
       </div>
     </div>
   );
@@ -185,7 +185,7 @@ function SudokuGrid({ board, givens, conflicts, solution, onChange, readOnly }) 
           const sameVal = v && activeVal && v === activeVal && !isActive;
           const peerHi = active != null && !isActive &&
             (Math.floor(active / 9) === r || active % 9 === c ||
-             (Math.floor(Math.floor(active / 9) / 3) === Math.floor(r / 3) && Math.floor((active % 9) / 3) === Math.floor(c / 3)));
+              (Math.floor(Math.floor(active / 9) / 3) === Math.floor(r / 3) && Math.floor((active % 9) / 3) === Math.floor(c / 3)));
 
           const borders = [
             "border-slate-200 dark:border-slate-800",

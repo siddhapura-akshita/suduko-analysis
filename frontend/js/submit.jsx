@@ -281,7 +281,7 @@ function SubmitPage({ addRecord }) {
         {/* LEFT — form + grid */}
         <div className="flex flex-col gap-5">
           <Card className="p-5">
-            <h3 className="mb-3.5 text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Puzzle metadata</h3>
+            <h3 className="mb-3.5 text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Puzzle Details</h3>
             <div className="grid grid-cols-2 gap-3.5">
               <Field label="Publisher" hint="required">
                 <Select value={publisher} onChange={onPublisherChange} options={D.SUBMIT_PUBLISHERS} placeholder="Select…" />

@@ -13,7 +13,7 @@ function verdictMeta(mismatch) {
     return { tone: "accurate", sig: false, badge: "bg-emerald-50 text-emerald-700 ring-emerald-600/30 dark:bg-emerald-500/10 dark:text-emerald-300", num: "text-emerald-600 dark:text-emerald-400", dot: "#059669" };
   if (mismatch > 0)
     return { tone: "under", sig, badge: "bg-amber-50 text-amber-700 ring-amber-600/30 dark:bg-amber-500/10 dark:text-amber-300", num: "text-amber-600 dark:text-amber-400", dot: "#d97706" };
-  return   { tone: "over",  sig, badge: "bg-sky-50 text-sky-700 ring-sky-600/30 dark:bg-sky-500/10 dark:text-sky-300",     num: "text-sky-600 dark:text-sky-400",     dot: "#0284c7" };
+  return { tone: "over", sig, badge: "bg-sky-50 text-sky-700 ring-sky-600/30 dark:bg-sky-500/10 dark:text-sky-300", num: "text-sky-600 dark:text-sky-400", dot: "#0284c7" };
 }
 
 function VerdictBadge({ verdict, mismatch, size = "sm" }) {
@@ -260,7 +260,7 @@ function RepositoryPage({ repo }) {
         <div className="mb-1.5 font-mono text-[11px] uppercase tracking-widest text-accent-600 dark:text-accent-400">Repository · Page 2</div>
         <h1 className="text-2xl font-semibold tracking-tight text-slate-900 dark:text-white">Puzzle repository &amp; analytics</h1>
         <p className="mt-1.5 max-w-2xl text-sm text-slate-500 dark:text-slate-400">
-          {repo.length} analyzed puzzles across {D.SUBMIT_PUBLISHERS.length} publishers. Filter the corpus and compare each publisher's claimed difficulty against the engine-measured technique-tier score.
+          {repo.length} analyzed puzzles across {D.SUBMIT_PUBLISHERS.length} publishers.
         </p>
       </div>
 
@@ -335,7 +335,7 @@ function RepositoryPage({ repo }) {
         <MetricCard label="Saved puzzles" value={repo.length} sub={`${filtered.length} in selection`} tone="accent" />
         <MetricCard label="Claim accuracy" value={`${Math.round(stats.agreement * 100)}%`} sub={`${stats.accurate} exact matches`} tone={stats.agreement > 0.5 ? "emerald" : "amber"} />
         <MetricCard label="Misclassified" value={stats.over + stats.under} sub={`${stats.under} under · ${stats.over} over`} tone="amber" />
-        <MetricCard label="Mean |mismatch|" value={stats.meanAbsMismatch.toFixed(1)} sub="scale points off" tone={stats.meanAbsMismatch < 1.5 ? "emerald" : "sky"} />
+        <MetricCard label="Mean mismatch" value={stats.meanAbsMismatch.toFixed(1)} sub="scale points off" tone={stats.meanAbsMismatch < 1.5 ? "emerald" : "sky"} />
       </div>
 
       {!analyticsUnlocked ? (
@@ -366,11 +366,11 @@ function RepositoryPage({ repo }) {
                   <div className="mt-1 font-mono text-xl font-semibold text-slate-800 dark:text-white">{stats.pearson.toFixed(3)}</div>
                   <div className="mt-0.5 text-[10px] text-slate-500">claimed vs measured</div>
                 </div>
-                <div className="rounded-lg bg-slate-50 p-3 dark:bg-slate-800/50">
-                  <div className="font-mono text-[10px] uppercase tracking-wider text-slate-400">Mean measured</div>
-                  <div className="mt-1 font-mono text-xl font-semibold text-slate-800 dark:text-white">{stats.meanMeasured.toFixed(2)}</div>
-                  <div className="mt-0.5 text-[10px] text-slate-500">average score</div>
-                </div>
+                {/* <div className="rounded-lg bg-slate-50 p-3 dark:bg-slate-800/50">
+                <div className="font-mono text-[10px] uppercase tracking-wider text-slate-400">Mean measured</div>
+                <div className="mt-1 font-mono text-xl font-semibold text-slate-800 dark:text-white">{stats.meanMeasured.toFixed(2)}</div>
+                <div className="mt-0.5 text-[10px] text-slate-500">average score</div>
+              </div> */}
                 <div className="rounded-lg bg-slate-50 p-3 dark:bg-slate-800/50">
                   <div className="font-mono text-[10px] uppercase tracking-wider text-slate-400">Underrated</div>
                   <div className="mt-1 font-mono text-xl font-semibold text-amber-600 dark:text-amber-400">{stats.under}</div>
@@ -408,11 +408,12 @@ function RepositoryPage({ repo }) {
             <CardHead title="Publisher × difficulty heatmap" sub="Average mismatch by publisher and claimed difficulty level" icon={<Icon.chart />} />
             <div className="p-4"><Heatmap rows={filtered} publishers={D.SUBMIT_PUBLISHERS} /></div>
           </Card>
-        </div>
-      )}
+        </div >
+      )
+      }
 
       {selected ? <DetailModal record={selected} onClose={() => setSelected(null)} /> : null}
-    </div>
+    </div >
   );
 }
 

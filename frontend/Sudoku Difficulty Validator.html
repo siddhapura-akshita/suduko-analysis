@@ -6,11 +6,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Sudoku Difficulty Validator</title>
 
+  <!-- Original fonts (IBM Plex) - uncomment to restore
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
     href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
     rel="stylesheet" />
+  -->
 
   <!-- Set theme before paint to avoid flash -->
   <script>
@@ -29,8 +31,10 @@
       theme: {
         extend: {
           fontFamily: {
-            sans: ["IBM Plex Sans", "system-ui", "sans-serif"],
-            mono: ["IBM Plex Mono", "ui-monospace", "monospace"],
+            // Original: sans: ["IBM Plex Sans", "system-ui", "sans-serif"],
+            // Original: mono: ["IBM Plex Mono", "ui-monospace", "monospace"],
+            sans: ["Times New Roman", "Times", "serif"],
+            mono: ["Courier New", "Courier", "monospace"],
           },
           colors: {
             canvas: { light: "#f5f7fa", dark: "#0a0f1a" },
