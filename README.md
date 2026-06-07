@@ -1,8 +1,8 @@
 # Sudoku Difficulty Validator
 
-> **Objective Sudoku Difficulty Validation Platform**
+> **Objective: Sudoku Difficulty Validation Platform**
 
-An advanced web application that measures Sudoku puzzle difficulty using 22+ logical solving techniques and compares objective measurements against publisher difficulty claims.
+A web application that measures Sudoku puzzle difficulty using 22+ logical solving techniques and compares objective measurements against publisher difficulty claims.
 
 **Live Demo:** [https://suduko-analysis-1.onrender.com/](https://suduko-analysis-1.onrender.com/)
 
@@ -10,7 +10,7 @@ An advanced web application that measures Sudoku puzzle difficulty using 22+ log
 
 ## Overview
 
-The Sudoku Difficulty Validator is a research platform designed to bring objectivity to Sudoku difficulty ratings. Publishers often assign difficulty labels (Easy, Medium, Hard, etc.) based on subjective criteria. This platform measures puzzle difficulty using a comprehensive technique-based scoring system and validates these claims against objective measurements.
+The Sudoku Difficulty Validator is a web application designed to bring objectivity to Sudoku difficulty ratings. Publishers often assign difficulty labels (Easy, Medium, Hard, etc.) based on subjective criteria. This platform measures puzzle difficulty using a comprehensive technique-based scoring system and validates these claims against objective measurements.
 
 Built as a full-stack web application with a React frontend and FastAPI backend, the platform allows users to submit puzzles, view detailed analysis results, build a personal repository, and unlock statistical analytics after contributing 5+ puzzles.
 
@@ -20,14 +20,13 @@ Whether you're a Sudoku enthusiast curious about puzzle difficulty, a researcher
 
 ## Features
 
-- **Real-time Puzzle Analysis**: Analyze puzzles using 22+ logical solving techniques across 10 difficulty tiers
-- **Publisher Validation**: Compare publisher-claimed difficulty against objective measurements
-- **Intelligent Verdict System**: Get clear feedback (Accurate, Underrated, Overrated) with severity levels
-- **Personal Repository**: Save and organize analyzed puzzles with searchable/sortable table
-- **Advanced Analytics**: Unlock statistical insights including Pearson correlation, publisher leaderboards, and accuracy rankings
-- **Publisher Benchmarking**: Compare accuracy across 5 major Sudoku publishers
-- **Responsive Design**: Full dark/light mode support with mobile-friendly interface
-- **User Authentication**: Simple email-based identification (no password required)
+- **Real-time Puzzle Analysis**: Analyze puzzles using 22+ logical solving techniques across 10 difficulty tiers.
+- **Publisher Validation**: Compare publisher-claimed difficulty against objective measurements.
+- **Intelligent Verdict System**: Get clear feedback (Accurate, Underrated, Overrated) with severity levels.
+- **Personal Repository**: Save and organize analyzed puzzles with searchable/sortable table.
+- **Advanced Analytics**: Unlock statistical insights including Pearson correlation, publisher leaderboards, and accuracy rankings.
+- **Publisher Benchmarking**: Compare accuracy across 4 major Sudoku publishers.
+- **User Authentication**: Simple email-based identification (no password required).
 
 ---
 
@@ -83,7 +82,6 @@ The platform implements a comprehensive set of Sudoku solving techniques organiz
 - Aligned Pair Exclusion
 - Almost Locked Sets (ALS)
 - Death Blossom
-- And more advanced techniques
 
 ---
 
@@ -140,19 +138,19 @@ sudoku-analysis/
 │   ├── css/
 │   │   └── styles.css             # Custom styles
 │   └── js/
-│       ├── app.jsx                # Main app component
-│       ├── submit.jsx             # Puzzle submission page
-│       ├── repository.jsx         # Puzzle repository & analytics
-│       ├── charts.jsx             # Statistical visualizations
-│       ├── user-context.jsx       # User authentication context
-│       ├── email-prompt.jsx       # Email identification modal
+│       ├── app.jsx                # Main app component (Base build reference)
+│       ├── submit.jsx             # Puzzle submission page (Base build reference)
+│       ├── repository.jsx         # Puzzle repository & analytics (Base build reference)
+│       ├── charts.jsx             # Statistical visualizations (Base build reference)
+│       ├── user-context.jsx       # User authentication context (Base build reference)
+│       ├── email-prompt.jsx       # Email identification modal (Base build reference)
 │       ├── api-adapter.js         # API client
 │       └── data.js                # Constants and helpers
 ├── backend/
-│   ├── api.py                     # FastAPI application & endpoints
-│   ├── solver.py                  # Sudoku solving engine (1500+ lines)
-│   ├── analyzer.py                # Publisher data & analytics
-│   ├── database.py                # SQLAlchemy models & session
+│   ├── api.py                     # FastAPI application & endpoints (Python version)
+│   ├── solver.py                  # Sudoku solving engine (Python version)
+│   ├── analyzer.py                # Publisher data & analytics (Python version)
+│   ├── database.py                # SQLAlchemy models & session (Python version)
 │   ├── requirements.txt           # Python dependencies
 │   └── tests/
 │       ├── test_solver.py         # Solver unit tests
@@ -215,31 +213,31 @@ sudoku-analysis/
 
 ### Submit a Puzzle
 
-1. Navigate to the **Submit** page
-2. Enter your puzzle grid (81 cells, use 0 for empty cells)
-3. Select the **publisher** from the dropdown
-4. Select the **claimed difficulty** label
-5. Click **Analyze** to measure objective difficulty
+1. Navigate to the **Submit** page.
+2. Enter your puzzle grid (81 cells, use 0 for empty cells).
+3. Select the **publisher** from the dropdown.
+4. Select the **claimed difficulty** label.
+5. Click **Analyze** to measure objective difficulty.
 6. Review the results:
    - Measured score (1-10)
    - Hardest technique required
    - Mismatch value (measured - claimed)
    - Verdict classification
    - Plain-language explanation
-7. Click **Submit to Repository** to save the puzzle
+7. Click **Submit to Repository** to save the puzzle.
 
 ### View Your Repository
 
-1. Navigate to the **Repository** page
-2. Browse your submitted puzzles in a sortable/searchable table
-3. Filter by publisher or difficulty
-4. Click on any puzzle to view detailed analysis
-5. Track your total puzzle count
+1. Navigate to the **Repository** page.
+2. Browse your submitted puzzles in a sortable/searchable table.
+3. Filter by publisher or difficulty.
+4. Click on any puzzle to view detailed analysis.
+5. Track your total puzzle count.
 
 ### Unlock Analytics
 
-1. Submit at least **5 puzzles** to unlock analytics
-2. Navigate to the **Repository** page and scroll to Analytics section
+1. Submit at least **5 puzzles** to unlock analytics.
+2. Navigate to the **Repository** page and scroll to Analytics section.
 3. View comprehensive statistics:
    - **Pearson Correlation**: Correlation between claimed and measured scores
    - **Agreement Percentage**: Fraction of accurate labels
@@ -327,11 +325,6 @@ Puzzles are scored on a **1-10 scale** based on the **hardest logical technique*
 - **Score 9-10**: Expert wings and uniqueness constraints
 - **Out-of-Scope**: Requires guessing or advanced chaining
 
-**Composite Score**: A secondary metric calculated as:
-```
-composite_score = round(max_technique_cost × 2.4 + total_cost × 0.32)
-```
-
 ### Verdict Calculation
 
 The platform compares measured scores against publisher claims:
@@ -414,10 +407,10 @@ We welcome contributions from the community! Here are areas where you can help:
 
 ## Authors
 
-**Akshita Siddhapura**
+**Akshita Siddhapura** <br>
 📧 Email: [siddhapuraakshita@gmail.com](mailto:siddhapuraakshita@gmail.com)
 
-**Ujwal Mojidra**
+**Ujwal Mojidra** <br>
 📧 Email: [ujwal.mojidra@gmail.com](mailto:ujwal.mojidra@gmail.com)
 
 ---
@@ -431,7 +424,7 @@ We're actively seeking collaborators and always excited to hear about:
 - **Publisher partnerships** for expanded difficulty validation
 - **Community feedback** and improvement suggestions
 
-Feel free to open an issue, submit a pull request, or reach out directly via email!
+Feel free to open an issue, submit a pull request, or reach out directly via email.
 
 ---
 
@@ -443,33 +436,10 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Acknowledgments
 
-- Sudoku solving techniques based on established logical methods documented by the Sudoku community
-- Publisher difficulty data sourced from respective platforms (NYT, Sudoku.com, The Guardian, Times Sudoku)
-- Built with modern web technologies and open-source tools
-- Inspired by the need for objective difficulty metrics in puzzle design
-
----
-
-## Roadmap
-
-### Planned Features
-
-- [ ] **Export Analytics**: Download analytics as PDF or CSV
-- [ ] **Batch Upload**: Submit multiple puzzles at once
-- [ ] **Social Sharing**: Share analysis results on social media
-- [ ] **Mobile App**: React Native app for iOS and Android
-- [ ] **Advanced Techniques**: Implement ALS-XZ, Kraken, and other expert techniques
-- [ ] **Puzzle Generator**: Create puzzles with target difficulty
-- [ ] **Leaderboard**: Global rankings of publisher accuracy
-- [ ] **Difficulty Predictor**: ML model to predict difficulty before solving
-
-### Recent Updates
-
-- ✅ Deployed to Render with PostgreSQL database
-- ✅ Implemented user authentication with email
-- ✅ Added analytics with 5-puzzle unlock threshold
-- ✅ Created comprehensive test suite
-- ✅ Built responsive dark/light mode UI
+- Sudoku solving techniques based on established logical methods documented by the Sudoku community.
+- Publisher difficulty data sourced from respective platforms (NYT, Sudoku.com, The Guardian, Times Sudoku).
+- Built with modern web technologies and open-source tools.
+- Inspired by the need for objective difficulty metrics in puzzle design.
 
 ---
 
@@ -493,6 +463,6 @@ If you find this project useful, please consider:
 
 ---
 
-**Made with ❤️ by Akshita Siddhapura and Ujwal Mojidra**
+**Made with 💪 by Akshita Siddhapura and Ujwal Mojidra**
 
 *Last Updated: June 2026*
